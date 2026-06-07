@@ -1,0 +1,1 @@
+console.log('API placeholder - Sprint 2 coming soon');

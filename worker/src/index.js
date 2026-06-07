@@ -1,0 +1,1 @@
+console.log('Worker placeholder - Sprint 3 coming soon');
