@@ -15,7 +15,7 @@ and alert you on Slack when it goes down.
 ## Running locally
 
 \`\`\`bash
-git clone https://github.com/your-username/statuspulse.git
+git clone https://github.com/Badr029/statuspulse.git
 cd statuspulse
 cp .env.example .env        # fill in your values
 docker-compose up --build
