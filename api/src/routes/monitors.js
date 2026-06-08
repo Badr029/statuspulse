@@ -2,6 +2,7 @@ const express = require('express');
 const pool = require('../db/conPool');
 const router = express.Router();
 
+// Helper function to validate URLs
 function isValidUrl(string) {
     try {
         const url = new URL(string);
@@ -11,6 +12,7 @@ function isValidUrl(string) {
     }
 }
 
+// GET /monitors - Retrieve all monitors
 router.get('/', async (req, res, next) => {
     try {
         const result = await pool.query(
@@ -31,6 +33,8 @@ router.get('/', async (req, res, next) => {
 // - Block exact duplicates?
 // - Warn on duplicate URLs?
 
+
+// POST /monitors - Create a new monitor
 router.post('/', async (req, res, next) => {
 
     try {
@@ -60,11 +64,77 @@ router.post('/', async (req, res, next) => {
             data: result.rows[0],
 
             });
-
     } catch (error) {
         next(error);
     }
 });
 
+//GET /monitors/:id - Retrieve a specific monitor by ID
+
+router.get('/:id', async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) {
+            return res.status(400).json({error: {message: 'Invalid monitor ID.'}});
+        }
+        const result = await pool.query(
+            'SELECT * FROM monitors WHERE id = $1',
+            [id]
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({error: {message: 'Monitor not found.'}});
+        }
+        res.json({
+            data: result.rows[0],
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
+// GET /monitors/:id/history - Retrieve monitoring Ping history for a specific monitor
+router.get('/:id/history', async (req, res, next) => {
+    try {
+
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) {
+            return res.status(400).json({error: {message: 'Monitor id is Invalid. It must be a number.'}});
+        }
+        const limit = Math.min(parseInt(req.query.limit) || 24, 200);
+
+        const monitorResult = await pool.query(
+            'SELECT * FROM monitors WHERE id = $1',
+            [id]
+        );
+        if (monitorResult.rows.length === 0) {
+            return res.status(404).json({error: {message: `Monitor with id ${id} not found.`}});
+        }
+        const historyResult = await pool.query(
+            `SELECT id,status,status_code,latency_ms,error_message,checked_at FROM ping_logs WHERE monitor_id = $1 ORDER BY checked_at DESC LIMIT $2`,
+            [id, limit]
+        );
+
+//Calculate uptime percentage
+        const totalPings = historyResult.rows.length;
+        const successfulPings = historyResult.rows.filter(row => row.status === 'up').length;
+        const uptimePercentage = totalPings > 0
+            ? ((successfulPings / totalPings) * 100).toFixed(2)
+            : null;
+
+        res.json({
+            monitor: monitorResult.rows[0],
+            history: historyResult.rows,
+            summary: {
+                total_pings: totalPings,
+                successful_pings: successfulPings,
+                downtime_pings: totalPings - successfulPings,
+                uptime_percentage: uptimePercentage,
+            },
+        });
+
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports = router;
