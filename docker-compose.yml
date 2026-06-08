@@ -1,5 +1,6 @@
 services:
 
+#the database service
   db:
     image: postgres:15
     restart: unless-stopped
@@ -15,6 +16,7 @@ services:
     networks:
       - statuspulse-network
 
+# The API service 
   api:
     build: ./api
     restart: unless-stopped
@@ -23,11 +25,20 @@ services:
       DATABASE_URL: ${DATABASE_URL}
     ports:
       - "3000:3000"
+
+    volumes:
+      - ./api:/app 
+      - /app/node_modules
+
     depends_on:
       - db
     networks:
       - statuspulse-network
 
+    command: npm run dev 
+
+
+# The worker service
   worker:
     build: ./worker
     restart: unless-stopped
