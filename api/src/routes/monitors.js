@@ -13,6 +13,30 @@ function isValidUrl(string) {
     }
 }
 
+// Middleware to fetch monitor by ID and attach to req object
+async function getMonitorById(req, res, next) {
+        try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) {
+            return res.status(400).json({error: {message: 'Monitor id is Invalid. It must be a number.'}});
+        }
+        const result = await pool.query(
+            'SELECT * FROM monitors WHERE id = $1',
+            [id]
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({error: {message: `Monitor with id ${id} not found.`}});
+        }
+        req.monitor = result.rows[0];
+        req.monitorId = id;
+        next();
+    } catch (error) {
+        next(error);
+    }
+
+}
+
+
 // GET /monitors - Retrieve all monitors
 router.get('/', async (req, res, next) => {
     try {
@@ -89,44 +113,19 @@ router.post('/test-alert', async (req, res, next) => {
 
 //GET /monitors/:id - Retrieve a specific monitor by ID
 
-router.get('/:id', async (req, res, next) => {
-    try {
-        const id = parseInt(req.params.id);
-        if (isNaN(id)) {
-            return res.status(400).json({error: {message: 'Invalid monitor ID.'}});
-        }
-        const result = await pool.query(
-            'SELECT * FROM monitors WHERE id = $1',
-            [id]
-        );
-        if (result.rows.length === 0) {
-            return res.status(404).json({error: {message: 'Monitor not found.'}});
-        }
-        res.json({
-            data: result.rows[0],
-        });
-    } catch (error) {
-        next(error);
-    }
+router.get('/:id', getMonitorById, async (req, res, next) => {
+    res.json({
+        data: req.monitor,
+    });
 });
 
 // GET /monitors/:id/history - Retrieve monitoring Ping history for a specific monitor
-router.get('/:id/history', async (req, res, next) => {
+router.get('/:id/history', getMonitorById, async (req, res, next) => {
     try {
 
-        const id = parseInt(req.params.id);
-        if (isNaN(id)) {
-            return res.status(400).json({error: {message: 'Monitor id is Invalid. It must be a number.'}});
-        }
+        const id = req.monitorId;
         const limit = Math.min(parseInt(req.query.limit) || 24, 200);
 
-        const monitorResult = await pool.query(
-            'SELECT * FROM monitors WHERE id = $1',
-            [id]
-        );
-        if (monitorResult.rows.length === 0) {
-            return res.status(404).json({error: {message: `Monitor with id ${id} not found.`}});
-        }
         const historyResult = await pool.query(
             `SELECT id,status,status_code,latency_ms,error_message,checked_at FROM ping_logs WHERE monitor_id = $1 ORDER BY checked_at DESC LIMIT $2`,
             [id, limit]
@@ -140,7 +139,7 @@ router.get('/:id/history', async (req, res, next) => {
             : null;
 
         res.json({
-            monitor: monitorResult.rows[0],
+            monitor: req.monitor,
             history: historyResult.rows,
             summary: {
                 total_pings: totalPings,

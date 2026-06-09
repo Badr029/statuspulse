@@ -2,7 +2,7 @@
 
 A real-time API health monitoring dashboard. Add any public URL and 
 StatusPulse will ping it every minute, track uptime and latency, 
-and alert you on Slack when it goes down.
+and alert you with email using SendGrid when it goes down.
 
 ## Tech stack
 
