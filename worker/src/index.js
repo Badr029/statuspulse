@@ -1,1 +1,7 @@
-console.log('Worker placeholder - Sprint 3 coming soon');
+require('dotenv').config();
+
+const {startScheduler} = require('./scheduler');
+
+console.log('[worker] StatusPulse Worker starting...');
+
+startScheduler();

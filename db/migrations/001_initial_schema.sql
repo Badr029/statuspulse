@@ -39,11 +39,11 @@ INSERT INTO monitors (name, url, interval_seconds) VALUES
     ('CoinDesk API',        'https://api.coindesk.com/v1/bpi/currentprice.json', 60)
 ON CONFLICT DO NOTHING; -- Prevent duplicate seed data on multiple runs
 
-INSERT INTO ping_logs (monitor_id, status, status_code, latency_ms, checked_at)
-VALUES
-    (1, 'up',   200, 142, NOW() - INTERVAL '5 minutes'),
-    (1, 'up',   200, 138, NOW() - INTERVAL '4 minutes'),
-    (1, 'down', NULL, NULL, NOW() - INTERVAL '3 minutes'),
-    (1, 'up',   200, 201, NOW() - INTERVAL '2 minutes'),
-    (1, 'up',   200, 155, NOW() - INTERVAL '1 minute')
-ON CONFLICT DO NOTHING; -- Prevent duplicate seed data on multiple runs
+-- INSERT INTO ping_logs (monitor_id, status, status_code, latency_ms, checked_at)
+-- VALUES
+--     (1, 'up',   200, 142, NOW() - INTERVAL '5 minutes'),
+--     (1, 'up',   200, 138, NOW() - INTERVAL '4 minutes'),
+--     (1, 'down', NULL, NULL, NOW() - INTERVAL '3 minutes'),
+--     (1, 'up',   200, 201, NOW() - INTERVAL '2 minutes'),
+--     (1, 'up',   200, 155, NOW() - INTERVAL '1 minute')
+-- ON CONFLICT DO NOTHING; -- Prevent duplicate seed data on multiple runs
