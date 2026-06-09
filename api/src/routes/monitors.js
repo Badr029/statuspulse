@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('../db/conPool');
 const router = express.Router();
+const { sendEmailAlert } = require('../services/email');
 
 // Helper function to validate URLs
 function isValidUrl(string) {
@@ -69,6 +70,23 @@ router.post('/', async (req, res, next) => {
     }
 });
 
+
+// TEMPORARY — remove before Sprint 6
+router.post('/test-alert', async (req, res, next) => {
+    try {
+        await sendEmailAlert({
+        monitor: { name: 'GitHub API', url: 'https://api.github.com' },
+        status: 'down',
+        error_message: 'Connection timed out',
+        });
+
+        res.json({ message: 'alert sent — check your inbox' });
+    } catch (err) {
+        next(err);
+    }
+    });
+
+
 //GET /monitors/:id - Retrieve a specific monitor by ID
 
 router.get('/:id', async (req, res, next) => {
@@ -135,6 +153,41 @@ router.get('/:id/history', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+
+
+
 });
 
+
+router.delete('/:id', async (req, res, next) => {
+    try {
+        const id = parseInt(req.params.id);
+
+        if (isNaN(id)) {
+        return res.status(400).json({
+            error: { message: 'monitor id must be a number' }
+        });
+        }
+
+        const result = await pool.query(
+        'DELETE FROM monitors WHERE id = $1 RETURNING *',
+        [id]
+        );
+
+        if (result.rows.length === 0) {
+        return res.status(404).json({
+            error: { message: `monitor with id ${id} not found` }
+        });
+        }
+
+        res.json({
+        message: 'monitor deleted',
+        data: result.rows[0],
+        });
+
+    } catch (err) {
+        next(err);
+    }
+
+});
 module.exports = router;
