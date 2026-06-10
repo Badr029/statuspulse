@@ -11,18 +11,10 @@ async function checkMonitors(monitor) {
     
     const result = await probeUrl(monitor.url);
 
-    // await pool.query(
-    //     `INSERT INTO ping_logs (monitor_id, status, status_code, latency_ms, error_message) VALUES ($1, $2, $3, $4, $5)`
-    //     , [monitor.id, result.status, result.status_code, result.latency_ms, result.error_message]);
-    try {
     await pool.query(
-        `INSERT INTO ping_logs (monitor_id, status, status_code, latency_ms, error_message) VALUES ($1, $2, $3, $4, $5)`,
-        [monitor.id, result.status, result.status_code, result.latency_ms, result.error_message]
-    );
-    console.log(`[scheduler] DB insert OK for ${monitor.name}`);
-    } catch (err) {
-    console.error(`[scheduler] DB insert FAILED for ${monitor.name}:`, err.message);
-    }
+        `INSERT INTO ping_logs (monitor_id, status, status_code, latency_ms, error_message) VALUES ($1, $2, $3, $4, $5)`
+        , [monitor.id, result.status, result.status_code, result.latency_ms, result.error_message]);
+
 
 
     console.log(

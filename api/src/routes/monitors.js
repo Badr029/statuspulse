@@ -158,26 +158,14 @@ router.get('/:id/history', getMonitorById, async (req, res, next) => {
 });
 
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', getMonitorById,  async (req, res, next) => {
     try {
-        const id = parseInt(req.params.id);
-
-        if (isNaN(id)) {
-        return res.status(400).json({
-            error: { message: 'monitor id must be a number' }
-        });
-        }
+        const id = req.monitorId;
 
         const result = await pool.query(
         'DELETE FROM monitors WHERE id = $1 RETURNING *',
         [id]
         );
-
-        if (result.rows.length === 0) {
-        return res.status(404).json({
-            error: { message: `monitor with id ${id} not found` }
-        });
-        }
 
         res.json({
         message: 'monitor deleted',
@@ -189,4 +177,109 @@ router.delete('/:id', async (req, res, next) => {
     }
 
 });
+
+
+//Update a monitor's name, url or interval_seconds.
+
+router.patch('/:id', getMonitorById, async (req, res, next) => {
+    try {
+        const id = req.monitorId;
+        const { name, url, interval_seconds } = req.body;
+
+        if (url && !isValidUrl(url)) {
+        return res.status(400).json({ error: { message: 'URL must be a valid http|https URL.' } });
+        }
+
+        if (interval_seconds && (interval_seconds < 30 || interval_seconds > 3600)) {
+        return res.status(400).json({ error: { message: 'Interval must be between 30 and 3600 seconds.' } });
+        }
+
+        const fields = [];
+        const values = [];  
+        let i = 1;
+        
+        if (name){
+            fields.push(`name = $${i++}`);
+            values.push(name.trim());
+        }
+
+        if (url){
+            fields.push(`url = $${i++}`);
+            values.push(url.trim());
+        }
+
+        if (interval_seconds){
+            fields.push(`interval_seconds = $${i++}`);
+            values.push(interval_seconds);
+        }
+    
+        if (fields.length === 0){
+            return res.status(400).json({ error: { message: 'No fields to update' } });
+        }
+
+        values.push(id);
+
+        const result = await pool.query(
+        `UPDATE monitors SET ${fields.join(', ')} WHERE id = $${i} RETURNING *`,
+        values
+        );
+
+        res.json({
+        message: 'monitor updated',
+        data: result.rows[0],
+        });
+
+    } catch (err) {
+        next(err);
+    }
+
+});
+
+
+//Pause or Resume a Monitor check
+
+router.patch('/:id/toggle', getMonitorById, async (req, res, next) => {
+    try {
+        const id = req.monitorId;
+        const result = await pool.query(
+        'UPDATE monitors SET is_active = NOT is_active WHERE id = $1 RETURNING *', 
+        [id]
+        );
+
+        const monitor = result.rows[0];
+
+        res.json({
+            message: `monitor ${monitor.is_active ? 'resumed' : 'paused'}`,
+            data: monitor,
+        });
+        
+
+    } catch (err) {
+        next(err);
+    }
+
+});
+
+
+// Clear a Monitor's history
+
+
+router.delete('/:id/history', getMonitorById, async (req, res, next) => {
+    try {
+        const id = req.monitorId;
+        const result = await pool.query(
+        'DELETE FROM ping_logs WHERE monitor_id = $1 RETURNING *',
+        [id]
+        );
+        res.json({
+            message: `cleared ${result.rowCount} ping logs for monitor ${id}`,
+            data: result.rows,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+
+
 module.exports = router;
