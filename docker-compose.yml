@@ -62,8 +62,28 @@ services:
     networks:
       - statuspulse-network
 
+    command: npm run dev
+
+  #The Frontend service
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api
+    networks:
+      - statuspulse-network
+
+    command: npm run dev -- --host  
+
 volumes:
   postgres_data:
 
 networks:
   statuspulse-network:
+
+

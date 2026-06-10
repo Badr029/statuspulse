@@ -41,7 +41,17 @@ async function getMonitorById(req, res, next) {
 router.get('/', async (req, res, next) => {
     try {
         const result = await pool.query(
-            'SELECT * FROM monitors ORDER BY created_at DESC'
+            `SELECT m.*, latest.status AS last_status 
+            FROM monitors m 
+            LEFT JOIN LATERAL (
+                SELECT status
+                FROM ping_logs
+                WHERE monitor_id = m.id
+                ORDER BY checked_at DESC
+                LIMIT 1
+            ) latest ON true
+            ORDER BY m.created_at DESC
+            `
         );
         res.json({
             data: result.rows,
@@ -157,6 +167,8 @@ router.get('/:id/history', getMonitorById, async (req, res, next) => {
 
 });
 
+
+//Delete a monitor
 
 router.delete('/:id', getMonitorById,  async (req, res, next) => {
     try {
