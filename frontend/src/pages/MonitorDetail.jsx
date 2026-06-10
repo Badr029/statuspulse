@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';  
-import { getHistory, toggleMonitor, deleteMonitor, clearHistory } from "../api/monitors";
+import { getHistory, toggleMonitor, deleteMonitor, clearHistory, updateMonitor } from "../api/monitors";
 import StatusBadge from "../components/StatusBadge";
 
 export default function MonitorDetail() {
@@ -10,11 +10,19 @@ export default function MonitorDetail() {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [editing, setEditing] = useState(false);
+    const [editForm, setEditFrom] = useState({name: '', url: '', interval_seconds: 60});
 
     async function fetchData() {
         try {
             const result = await getHistory(id);
             setData(result);
+            setEditFrom({
+                name: result.monitor.name,
+                url: result.monitor.url,
+                interval_seconds: result.monitor.interval_seconds
+            });
+
             } catch (err) {
             setError('Failed to load monitor details.');
             } finally {
@@ -45,6 +53,25 @@ export default function MonitorDetail() {
         fetchData();
     }
 
+    function handleEditChange(e){
+        setEditFrom(prev=>({
+            ...prev,
+            [e.target.name]: e.target.value
+        }));
+    }
+
+    async function handleUpdate(e){
+        e.preventDefault();
+        await updateMonitor(id, {
+            ...editForm,
+            interval_seconds: parseInt(editForm.interval_seconds)
+        });
+
+        setEditing(false);
+        fetchData();
+    }
+
+
     if (loading) return <div className="text-center text-gray-400 py-20">Loading...</div>;
     if (error) return <div className="text-center text-gray-400 py-20">{error}</div>;
 
@@ -65,15 +92,70 @@ export default function MonitorDetail() {
             {/* Header */}
             <div className="flex items-start justify-between mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-white">
-                        {monitor.name}
-                    </h1>
+                    <div className="flex items-center gap-4">
+                        <h1 className="text-2xl font-bold text-white">
+                            {monitor.name}
+                        </h1>
+                        <button
+                            onClick={() => setEditing(true)}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                            Edit
+                        </button>
+                    </div>
                     <p className="text-gray-400 mt-1">
                         {monitor.url}
                     </p>
                 </div>
                 {lastPing && <StatusBadge status={lastPing.status} />}
             </div>
+        {editing && (
+            <form onSubmit={handleUpdate} className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
+                <div className="flex flex-col gap-4">
+                    <input
+                        name="name"
+                        value={editForm.name}
+                        onChange={handleEditChange}
+                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                    />
+
+                    <input
+                        name="url"
+                        value={editForm.url}
+                        onChange={handleEditChange}
+                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                    />
+
+                    <select
+                        name="interval_seconds"
+                        value={editForm.interval_seconds}
+                        onChange={handleEditChange}
+                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                    >
+                        <option value={30}>Every 30 seconds</option>
+                        <option value={60}>Every minute</option>
+                        <option value={300}>Every 5 minutes</option>
+                        <option value={600}>Every 10 minutes</option>
+                        <option value={900}>Every 15 minutes</option>
+                        <option value={1800}>Every 30 minutes</option>
+                        <option value={3600}>Every hour</option>
+                    </select>
+
+                    <div className="flex gap-3">
+                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                            Save
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setEditing(false)}
+                            className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </form>
+        )}
 
             {/* Summary Card */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -120,6 +202,7 @@ export default function MonitorDetail() {
 
             {/* Actions */}
             <div className="flex gap-3">
+
                 <button
                     onClick={handleToggle}
                     className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm transition-colors"

@@ -105,20 +105,7 @@ router.post('/', async (req, res, next) => {
 });
 
 
-// TEMPORARY — remove before Sprint 6
-router.post('/test-alert', async (req, res, next) => {
-    try {
-        await sendEmailAlert({
-        monitor: { name: 'GitHub API', url: 'https://api.github.com' },
-        status: 'down',
-        error_message: 'Connection timed out',
-        });
 
-        res.json({ message: 'alert sent — check your inbox' });
-    } catch (err) {
-        next(err);
-    }
-    });
 
 
 //GET /monitors/:id - Retrieve a specific monitor by ID

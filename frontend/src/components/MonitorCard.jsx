@@ -14,13 +14,15 @@ export default function MonitorCard({ monitor, onToggle, onDelete}) {
                         <h3 className="font-semibold text-white">{monitor.name}</h3>
                         <p className="text-gray-400 text-sm mt-1 truncate max-w-xs">{monitor.url}</p>
                     </div>
-                <StatusBadge status={monitor.last_status || 'unknown'} />
+                <StatusBadge status={monitor.last_status || 'unknown'}
+                isActive={monitor.is_active}
+                />
                 </div>
 
                 {/* Stats */} 
                 <div className="flex gap-4 text-sm text-gray-400 mb-4">
                     <span>Every {monitor.interval_seconds}s</span>
-                    <span>{monitor.is_active ? 'Active' : 'Paused'}</span>
+                    {monitor.is_active && <span>Active</span>}
                 </div>
 
                 {/* Actions */}

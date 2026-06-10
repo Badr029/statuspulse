@@ -1,4 +1,13 @@
-export default function StatusBadge({ status }) {
+export default function StatusBadge({ status, isActive = true }) {
+        if (!isActive) {
+        return (
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-gray-800 text-gray-300">
+                <span className="w-2 h-2 rounded-full bg-gray-400" />
+                PAUSED
+            </span>
+        );
+    }
+    
     const isUp = status === 'up';
     const isDown = status === 'down';
     return (
@@ -16,7 +25,7 @@ export default function StatusBadge({ status }) {
                         ? 'bg-red-400'
                         : 'bg-grey-400'
                 }`} />
-      {isUp ? 'UP' : 'DOWN'}
+        {isUp ? 'UP' : 'DOWN'}
     </span>
     );
 }
