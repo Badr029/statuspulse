@@ -1,0 +1,27 @@
+{
+  "name": "statuspulse",
+  "version": "1.0.0",
+  "description": "A real-time API health monitoring dashboard. Add any public URL and \r StatusPulse will ping it every minute, track uptime and latency, \r and alert you with email using SendGrid when it goes down.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Badr029/statuspulse.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Badr029/statuspulse/issues"
+  },
+  "homepage": "https://github.com/Badr029/statuspulse#readme",
+  "devDependencies": {
+    "jest": "^30.4.2",
+    "supertest": "^7.2.2"
+  }
+}
