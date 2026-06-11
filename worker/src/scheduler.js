@@ -73,4 +73,13 @@ function startScheduler() {
     runChecks();
 }
 
-module.exports = { startScheduler };
+
+
+// Export for testing - allow resetting failureCounts between tests
+function resetFailureCounts() {
+    for (const monitorId in failureCounts) {
+        failureCounts[monitorId] = 0;
+    }
+}
+
+module.exports = { startScheduler, checkMonitors, runChecks, resetFailureCounts };
