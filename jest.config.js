@@ -7,5 +7,5 @@ module.exports = {
 
     moduleDirectories:['node_modules','worker/node_modules','api/node_modules'],
 
-
+    setupFiles: ['<rootDir>/tests/setup.js'],
 };

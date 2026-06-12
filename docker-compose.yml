@@ -5,13 +5,28 @@ services:
     image: postgres:15
     restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./db/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - statuspulse-network
+
+# Test database service
+  test_db:
+    image: postgres:15
+    restart: "no"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: statuspulse_test_db
+    ports:
+      - "5433:5432"
+    volumes:
       - ./db/migrations:/docker-entrypoint-initdb.d
     networks:
       - statuspulse-network

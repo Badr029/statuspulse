@@ -128,7 +128,7 @@ router.get('/:id/history', getMonitorById, async (req, res, next) => {
             [id, limit]
         );
 
-//Calculate uptime percentage
+        //Calculate uptime percentage
         const totalPings = historyResult.rows.length;
         const successfulPings = historyResult.rows.filter(row => row.status === 'up').length;
         const uptimePercentage = totalPings > 0
