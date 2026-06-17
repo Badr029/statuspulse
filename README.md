@@ -288,5 +288,5 @@ Pausing a noisy or misconfigured monitor via `PATCH /monitors/:id/toggle` is a d
 
 ## Author
 
-**Your Name**
+**Mohamed Badr**
 [LinkedIn](https://linkedin.com/in/mohamedbadr14) · [GitHub](https://github.com/Badr029)
