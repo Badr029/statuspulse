@@ -16,16 +16,19 @@ export default defineConfig({
     watch: {
       usePolling: true
     },
+    proxy: {
+      '/api':{
+        target: 'http://api:3000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    },
 
     hmr: {
       host:'localhost',
       port: 5173
     },
 
-    proxy: {
-      '/monitors': 'http://api:3000',
-      '/health': 'http://api:3000'
-    }
   }
 
 })

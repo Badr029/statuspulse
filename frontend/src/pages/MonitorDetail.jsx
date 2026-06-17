@@ -88,30 +88,32 @@ export default function MonitorDetail() {
         const lastPing = history[0];
 
     return (
-        <div>
+        <div data-testid="monitor-detail-page" data-monitor-id={monitor.id}>
             {/* Header */}
             <div className="flex items-start justify-between mb-6">
                 <div>
                     <div className="flex items-center gap-4">
-                        <h1 className="text-2xl font-bold text-white">
+                        <h1 data-testid="monitor-detail-name" className="text-2xl font-bold text-white">
                             {monitor.name}
                         </h1>
                         <button
+                            data-testid="monitor-detail-edit"
                             onClick={() => setEditing(true)}
                             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
                             Edit
                         </button>
                     </div>
-                    <p className="text-gray-400 mt-1">
+                    <p data-testid="monitor-detail-url" className="text-gray-400 mt-1">
                         {monitor.url}
                     </p>
                 </div>
                 {lastPing && <StatusBadge status={lastPing.status} />}
             </div>
         {editing && (
-            <form onSubmit={handleUpdate} className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
+            <form data-testid="monitor-edit-form" onSubmit={handleUpdate} className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
                 <div className="flex flex-col gap-4">
                     <input
+                        data-testid="monitor-edit-name"
                         name="name"
                         value={editForm.name}
                         onChange={handleEditChange}
@@ -119,6 +121,7 @@ export default function MonitorDetail() {
                     />
 
                     <input
+                        data-testid="monitor-edit-url"
                         name="url"
                         value={editForm.url}
                         onChange={handleEditChange}
@@ -126,6 +129,7 @@ export default function MonitorDetail() {
                     />
 
                     <select
+                        data-testid="monitor-edit-interval"
                         name="interval_seconds"
                         value={editForm.interval_seconds}
                         onChange={handleEditChange}
@@ -141,11 +145,12 @@ export default function MonitorDetail() {
                     </select>
 
                     <div className="flex gap-3">
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                        <button data-testid="monitor-edit-save" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
                             Save
                         </button>
 
                         <button
+                            data-testid="monitor-edit-cancel"
                             type="button"
                             onClick={() => setEditing(false)}
                             className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
@@ -165,7 +170,7 @@ export default function MonitorDetail() {
                     {label:'Successful Pings', value: summary.successful_pings},
                     {label:'Failed Pings', value: summary.downtime_pings},
                 ].map(({label, value})=>(
-                    <div key={label} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+                    <div key={label} data-testid="summary-card" data-summary-label={label} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
                         <p className="text-gray-400 text-sm">{label}</p>
                         <p className="text-white text-xl font-bold mt-1">{value}</p>
                     </div>
@@ -204,18 +209,21 @@ export default function MonitorDetail() {
             <div className="flex gap-3">
 
                 <button
+                    data-testid="monitor-detail-toggle"
                     onClick={handleToggle}
                     className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm transition-colors"
                     >
                     {monitor.is_active ? 'Pause monitor' : 'Resume monitor'}
                 </button>
                 <button
+                    data-testid="monitor-detail-clear-history"
                     onClick={handleClearHistory}
                     className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm transition-colors"
                     >
                     Clear history
                 </button>
                 <button
+                    data-testid="monitor-detail-delete"
                     onClick={handleDelete}
                     className="bg-red-900 hover:bg-red-800 text-red-300 px-4 py-2 rounded-lg text-sm transition-colors"
                     >

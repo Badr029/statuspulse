@@ -31,8 +31,8 @@ export default function AddMonitor() {
     }
 
     return(
-        <div className="max-w-lg mx-auto">
-            <h1 className="text-2xl font-bold text-white mb-6">Add New Monitor</h1>
+        <div data-testid="add-monitor-page" className="max-w-lg mx-auto">
+            <h1 data-testid="add-monitor-title" className="text-2xl font-bold text-white mb-6">Add New Monitor</h1>
         
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
                 <div className="flex flex-col gap-5">
@@ -42,6 +42,7 @@ export default function AddMonitor() {
                             Name
                         </label>
                         <input
+                        data-testid="add-monitor-name"
                         name="name"
                         value={form.name}
                         onChange={handleChange}
@@ -54,6 +55,7 @@ export default function AddMonitor() {
                             URL
                         </label>
                         <input
+                        data-testid="add-monitor-url"
                         name="url"
                         value={form.url}
                         onChange={handleChange}
@@ -66,6 +68,7 @@ export default function AddMonitor() {
                             Check Interval
                         </label>
                         <select
+                        data-testid="add-monitor-interval"
                         name="interval_seconds"
                         value={form.interval_seconds}
                         onChange={handleChange}
@@ -79,13 +82,14 @@ export default function AddMonitor() {
                     </div>  
 
                     {error && (
-                        <div className="bg-red-900 border border-red-700 text-red-300 px-4 py-3 rounded-lg text-sm">
+                        <div data-testid="add-monitor-error" className="bg-red-900 border border-red-700 text-red-300 px-4 py-3 rounded-lg text-sm">
                         {error}  
                         </div> 
                     )}
 
                     <div className="flex gap-3 pt-2">
                         <button
+                        data-testid="add-monitor-submit"
                         onClick={handleSubmit}
                         disabled={loading}
                         className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg font-medium transition-colors">
@@ -93,6 +97,7 @@ export default function AddMonitor() {
                             
                         </button>
                         <button
+                        data-testid="add-monitor-cancel"
                         onClick={() => navigate('/dashboard')}
                         className="flex-1 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                             Cancel

@@ -31,3 +31,19 @@ target/
 .mvn/
 *.iml
 .idea/
+
+
+# Java / Selenium
+*.class
+target/
+tests/e2e/target/
+tests/e2e/reports/
+tests/e2e/screenshots/
+tests/e2e/test-output/
+tests/e2e/.idea/
+
+# Keep Maven wrapper if used
+!tests/e2e/.mvn/
+!tests/e2e/.mvn/wrapper/
+!tests/e2e/.mvn/wrapper/maven-wrapper.jar
+

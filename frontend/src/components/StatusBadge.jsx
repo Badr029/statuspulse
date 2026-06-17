@@ -1,7 +1,7 @@
 export default function StatusBadge({ status, isActive = true }) {
         if (!isActive) {
         return (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-gray-800 text-gray-300">
+            <span data-testid="status-badge" data-status="paused" className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-gray-800 text-gray-300">
                 <span className="w-2 h-2 rounded-full bg-gray-400" />
                 PAUSED
             </span>
@@ -11,7 +11,7 @@ export default function StatusBadge({ status, isActive = true }) {
     const isUp = status === 'up';
     const isDown = status === 'down';
     return (
-        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
+        <span data-testid="status-badge" data-status={isUp ? 'up' : isDown ? 'down' : 'unknown'} className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
             isUp
                 ? 'bg-green-900 text-green-300'
                 :  isDown

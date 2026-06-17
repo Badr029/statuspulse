@@ -52,19 +52,19 @@ export default function Dashboard() {
     );
 
     return(
-        <div>
+        <div data-testid="dashboard-page">
         <div className='flex items-center justify-between mb-6'>
-            <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-            <span className="text-gray-400 text-sm">{monitors.length} monitors</span>
+            <h1 data-testid="dashboard-title" className="text-2xl font-bold text-white">Dashboard</h1>
+            <span data-testid="monitor-count" className="text-gray-400 text-sm">{monitors.length} monitors</span>
         </div>
 
         {monitors.length === 0 ? (
-            <div className="text-center text-gray-400 py-20">
+            <div data-testid="empty-monitors" className="text-center text-gray-400 py-20">
             No monitors yet. {' '}
-            <Link to="/monitors/add" className="text-blue-400 hover:underline">Add one</Link>
+            <Link to="/monitors/add" data-testid="empty-add-monitor" className="text-blue-400 hover:underline">Add one</Link>
             </div>
         ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div data-testid="monitor-grid" className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {monitors.map(monitor => (
                 <MonitorCard
                 key={monitor.id}
@@ -76,7 +76,7 @@ export default function Dashboard() {
             </div>
         )}
 
-        <p className="text-gray-600 text-xs text-center mt-8 margin-top=4 ">Auto-refreshes every 30 seconds</p>
+        <p data-testid="auto-refresh-note" className="text-gray-600 text-xs text-center mt-8 margin-top=4 ">Auto-refreshes every 30 seconds</p>
         </div>
     );
 }
