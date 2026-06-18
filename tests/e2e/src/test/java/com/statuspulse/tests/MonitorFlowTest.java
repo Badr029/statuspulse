@@ -158,7 +158,7 @@ public class MonitorFlowTest extends BaseTest {
 
     @Test(priority = 5, description = "Refreshing Add Monitor page keeps frontend UI")
     public void refreshingAddMonitorPageKeepsUI() {
-     ExtentTest extentTest = ExtentReportManager.createTest("refreshingAddMonitorPageKeepsUI");
+        ExtentTest extentTest = ExtentReportManager.createTest("refreshingAddMonitorPageKeepsUI");
         try {
             driver.get(baseUrl + "/monitors/add");
             driver.navigate().refresh();

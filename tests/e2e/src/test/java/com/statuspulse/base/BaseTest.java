@@ -28,7 +28,10 @@ public class BaseTest {
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--disable-gpu");
         options.addArguments("--no-sandbox");
-
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-extensions");
+        options.addArguments("--disable-setuid-sandbox");
+        options.addArguments("--remote-debugging-port=0");
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(ConfigReader.getInt("implocot.wait.seconds")));
         baseUrl = ConfigReader.get("base.url");
