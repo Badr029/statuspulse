@@ -123,20 +123,20 @@ jobs:
           node-version: '20'
           
       - name: Install Docker Compose
-        run: |
-          # Docker Compose v2 
+        run: docker compose version
 
       - name: Create .env file for docker-compose
         run: |
-          cat > .env << EOF
+          cat > .env << 'EOF'
           POSTGRES_USER=statuspulse
           POSTGRES_PASSWORD=localdevpassword
           POSTGRES_DB=statuspulse_db
           PORT=3000
           DATABASE_URL=postgresql://statuspulse:localdevpassword@db:5432/statuspulse_db
-          SENDGRID_API_KEY= ${{ secrets.SENDGRID_API_KEY }}
-          ALERT_FROM_EMAIL= ${{ secrets.ALERT_FROM_EMAIL }}
-          ALERT_TO_EMAIL= ${{ secrets.ALERT_TO_EMAIL }}
+          SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }}
+          ALERT_FROM_EMAIL=${{ secrets.ALERT_FROM_EMAIL }}
+          ALERT_TO_EMAIL=${{ secrets.ALERT_TO_EMAIL }}
+          EOF
 
       - name: Start full stack with Docker Compose
         run: docker compose up -d --build --wait
