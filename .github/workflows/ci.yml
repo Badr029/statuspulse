@@ -106,7 +106,7 @@ jobs:
   e2e-tests:
     name: Java Selenium E2E Tests
     runs-on: ubuntu-latest
-    needs: jest-tests
+    needs: [jest-tests , docker-build]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
