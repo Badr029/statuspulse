@@ -2,7 +2,7 @@
 
 > A real-time API health monitoring dashboard — built to demonstrate production-grade backend engineering, automated testing, and DevOps practices.
 
-![CI](https://github.com/YOUR_USERNAME/statuspulse/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/Badr029/statuspulse/actions/workflows/ci.yml/badge.svg)
 ![Docker](https://img.shields.io/badge/docker-compose-2496ED?logo=docker&logoColor=white)
 ![Node](https://img.shields.io/badge/node-20-339933?logo=node.js&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/postgresql-15-4169E1?logo=postgresql&logoColor=white)
