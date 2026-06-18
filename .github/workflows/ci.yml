@@ -144,13 +144,18 @@ jobs:
 
       - name: Wait for frontend to be ready
         run: |
-          curl --retry 10 \
-                --retry-delay 5 \
-                --retry-connrefused \
-                -f http://localhost:5173 \
-                --silent \
-                --output /dev/null
-          echo "Frontend is ready"
+          echo "Waiting for frontend..."
+          for i in {1..30}; do
+            if curl -s -o /dev/null -w "%{http_code}" http://localhost:5173 | grep -q "200\|304"; then
+              echo "Frontend is ready"
+              exit 0
+            fi
+            echo "Attempt $i/30 - not ready yet, waiting 5 seconds..."
+            sleep 5
+          done
+          echo "Frontend failed to start after 150 seconds"
+          docker compose logs frontend
+          exit 1
 
       - name: Cache Maven packages
         uses: actions/cache@v4
