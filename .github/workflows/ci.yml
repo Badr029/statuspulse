@@ -54,7 +54,7 @@ jobs:
 
       - name: Apply database migrations
         run: |
-          PGPASSWORD=testpassword psql -h localhost -p 5433 -U statuspulse -d statuspulse_test_db -f db/migrations/01_create_tables.sql
+          PGPASSWORD=testpassword psql -h localhost -p 5433 -U statuspulse -d statuspulse_test_db -f db/migrations/001_initial_schema.sql
         env:
           PGPASSWORD: testpassword
 
