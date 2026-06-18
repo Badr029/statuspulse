@@ -22,11 +22,7 @@ jobs:
           POSTGRES_DB: statuspulse_test_db
         ports:
           - "5433:5432"
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
       - name: Checkout code
@@ -74,36 +70,36 @@ jobs:
     runs-on: ubuntu-latest
     needs: jest-tests
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Docker build
-      uses: docker/setup-buildx-action@v3
-
-    - name: Docker API image build 
-      uses: docker/build-push-action@v5
-      with:
-        context: ./api
-        push: false
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-
-    - name: Docker Worker image build
-      uses: docker/build-push-action@v5
-      with:
-        context: ./worker
-        push: false
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-    
-    - name: Docker Frontend image build
-      uses: docker/build-push-action@v5
-      with:
-        context: ./frontend
-        push: false
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+  
+      - name: Docker build
+        uses: docker/setup-buildx-action@v3
+  
+      - name: Docker API image build 
+        uses: docker/build-push-action@v5
+        with:
+          context: ./api
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+  
+      - name: Docker Worker image build
+        uses: docker/build-push-action@v5
+        with:
+          context: ./worker
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
+      - name: Docker Frontend image build
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
 #JOB 3: Java Selenium E2E Tests 
 
