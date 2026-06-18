@@ -170,15 +170,14 @@ jobs:
           CI: true
 
       - name: Upload E2E test reports
-        uses: actions/upload-artifact@v3
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: e2e-reports
           path: |
             tests/e2e/reports/
-            tests/e2e/test-output/
             tests/e2e/screenshots/
-
+            tests/e2e/test-output/
           retention-days: 7
         
       - name: Stop Docker Compose
