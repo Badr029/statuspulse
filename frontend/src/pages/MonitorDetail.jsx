@@ -72,8 +72,8 @@ export default function MonitorDetail() {
     }
 
 
-    if (loading) return <div className="text-center text-gray-400 py-20">Loading...</div>;
-    if (error) return <div className="text-center text-gray-400 py-20">{error}</div>;
+    if (loading) return <div className="muted py-20 text-center">Loading...</div>;
+    if (error) return <div className="py-20 text-center text-red-200">{error}</div>;
 
     const{monitor, history, summary} = data;
 
@@ -88,36 +88,46 @@ export default function MonitorDetail() {
         const lastPing = history[0];
 
     return (
-        <div data-testid="monitor-detail-page" data-monitor-id={monitor.id}>
+        <div data-testid="monitor-detail-page" data-monitor-id={monitor.id} className="space-y-6">
             {/* Header */}
-            <div className="flex items-start justify-between mb-6">
+            <div className="mx-auto flex max-w-6xl items-center justify-between">
+                <span className="eyebrow">Monitor detail</span>
+                <button
+                    data-testid="Back-button"
+                    onClick={() => navigate('/dashboard')}
+                    className="btn-secondary rounded-lg px-4 py-2 text-sm font-bold transition-colors"
+                    >
+                    Back
+                </button>
+            </div>
+            <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
                 <div>
-                    <div className="flex items-center gap-4">
-                        <h1 data-testid="monitor-detail-name" className="text-2xl font-bold text-white">
+                    <div className="mt-5 flex items-center gap-4">
+                        <h1 data-testid="monitor-detail-name" className="section-title text-white">
                             {monitor.name}
                         </h1>
                         <button
                             data-testid="monitor-detail-edit"
                             onClick={() => setEditing(true)}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                            className="btn-primary rounded-lg px-4 py-2 text-sm font-bold transition-colors">
                             Edit
                         </button>
                     </div>
-                    <p data-testid="monitor-detail-url" className="text-gray-400 mt-1">
+                    <p data-testid="monitor-detail-url" className="muted mt-2">
                         {monitor.url}
                     </p>
                 </div>
                 {lastPing && <StatusBadge status={lastPing.status} />}
             </div>
         {editing && (
-            <form data-testid="monitor-edit-form" onSubmit={handleUpdate} className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
+            <form data-testid="monitor-edit-form" onSubmit={handleUpdate} className="glass-panel rounded-2xl p-6">
                 <div className="flex flex-col gap-4">
                     <input
                         data-testid="monitor-edit-name"
                         name="name"
                         value={editForm.name}
                         onChange={handleEditChange}
-                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                        className="field w-full rounded-lg px-3 py-2"
                     />
 
                     <input
@@ -125,7 +135,7 @@ export default function MonitorDetail() {
                         name="url"
                         value={editForm.url}
                         onChange={handleEditChange}
-                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                        className="field w-full rounded-lg px-3 py-2"
                     />
 
                     <select
@@ -133,7 +143,7 @@ export default function MonitorDetail() {
                         name="interval_seconds"
                         value={editForm.interval_seconds}
                         onChange={handleEditChange}
-                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                        className="field w-full rounded-lg px-3 py-2"
                     >
                         <option value={30}>Every 30 seconds</option>
                         <option value={60}>Every minute</option>
@@ -145,7 +155,7 @@ export default function MonitorDetail() {
                     </select>
 
                     <div className="flex gap-3">
-                        <button data-testid="monitor-edit-save" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                        <button data-testid="monitor-edit-save" className="btn-primary rounded-lg px-4 py-2 font-bold transition-colors">
                             Save
                         </button>
 
@@ -153,7 +163,7 @@ export default function MonitorDetail() {
                             data-testid="monitor-edit-cancel"
                             type="button"
                             onClick={() => setEditing(false)}
-                            className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
+                            className="btn-secondary rounded-lg px-4 py-2 font-bold transition-colors"
                         >
                             Cancel
                         </button>
@@ -163,40 +173,40 @@ export default function MonitorDetail() {
         )}
 
             {/* Summary Card */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 {[
                     {label:'Uptime', value: summary.uptime_percentage ? `${summary.uptime_percentage}%` : 'N/A'},
                     {label:'Total Pings', value: summary.total_pings},
                     {label:'Successful Pings', value: summary.successful_pings},
                     {label:'Failed Pings', value: summary.downtime_pings},
                 ].map(({label, value})=>(
-                    <div key={label} data-testid="summary-card" data-summary-label={label} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
-                        <p className="text-gray-400 text-sm">{label}</p>
-                        <p className="text-white text-xl font-bold mt-1">{value}</p>
+                    <div key={label} data-testid="summary-card" data-summary-label={label} className="glass-card rounded-xl p-4">
+                        <p className="muted text-sm">{label}</p>
+                        <p className="mt-1 text-xl font-bold text-white">{value}</p>
                     </div>
                 ))}
             </div>
 
             {/* Latency chart */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <h2 className="text-white font-semibold mb-4">Latency History</h2>
+            <div className="glass-panel rounded-2xl p-6">
+                <h2 className="mb-4 text-xl font-bold text-white">Latency History</h2>
                 {chartData.length === 0 ? (
-                    <p className="text-gray-400 text-center py-10">No data yet.</p>
+                    <p className="muted py-10 text-center">No data yet.</p>
                 ):(
                     <ResponsiveContainer width="100%" height= {250}>
                         <LineChart data={chartData} >
-                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                            <XAxis dataKey="time" tick={{fill: '#9ca3af', fontSize: 11}} />
-                            <YAxis tick={{fill: '#9ca3af', fontSize: 11}} unit="ms" />
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(213,236,226,0.16)" />
+                            <XAxis dataKey="time" tick={{fill: '#a9bbb4', fontSize: 11}} />
+                            <YAxis tick={{fill: '#a9bbb4', fontSize: 11}} unit="ms" />
                             <Tooltip
-                                contentStyle={{backgroundColor: '#111827', border:'1px solid #374151'}}
-                                labelStyle={{color: '#9ca3af'}}
+                                contentStyle={{backgroundColor: '#0b1f1c', border:'1px solid rgba(213,236,226,0.24)', borderRadius: '10px'}}
+                                labelStyle={{color: '#a9bbb4'}}
                                 formatter={(value) => [`${value} ms`,'Latency']}
                             />
                             <Line
                                 type="monotone"
                                 dataKey="latency"
-                                stroke="#3b82f6"
+                                stroke="#50e89a"
                                 strokeWidth={2}
                                 dot={false}
                             />
@@ -206,26 +216,26 @@ export default function MonitorDetail() {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
 
                 <button
                     data-testid="monitor-detail-toggle"
                     onClick={handleToggle}
-                    className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm transition-colors"
+                    className="btn-secondary rounded-lg px-4 py-2 text-sm font-bold transition-colors"
                     >
                     {monitor.is_active ? 'Pause monitor' : 'Resume monitor'}
                 </button>
                 <button
                     data-testid="monitor-detail-clear-history"
                     onClick={handleClearHistory}
-                    className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm transition-colors"
+                    className="btn-secondary rounded-lg px-4 py-2 text-sm font-bold transition-colors"
                     >
                     Clear history
                 </button>
                 <button
                     data-testid="monitor-detail-delete"
                     onClick={handleDelete}
-                    className="bg-red-900 hover:bg-red-800 text-red-300 px-4 py-2 rounded-lg text-sm transition-colors"
+                    className="btn-danger rounded-lg px-4 py-2 text-sm font-bold transition-colors"
                     >
                     Delete monitor
                 </button>

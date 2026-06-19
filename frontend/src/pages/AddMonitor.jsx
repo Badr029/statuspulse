@@ -31,14 +31,24 @@ export default function AddMonitor() {
     }
 
     return(
-        <div data-testid="add-monitor-page" className="max-w-lg mx-auto">
-            <h1 data-testid="add-monitor-title" className="text-2xl font-bold text-white mb-6">Add New Monitor</h1>
+        <div data-testid="add-monitor-page" className="mx-auto max-w-2xl">
+            <div className="mx-auto flex max-w-6xl items-center justify-between">
+                <span className="eyebrow">Create a new check</span>
+                <button
+                    data-testid="Back-button"
+                    onClick={() => navigate('/dashboard')}
+                    className="btn-secondary rounded-lg px-4 py-2 text-sm font-bold transition-colors"
+                    >
+                    Back
+                </button>
+            </div>
+            <h1 data-testid="add-monitor-title" className="section-title mt-5 mb-6 text-white">Add New Monitor</h1>
         
-            <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+            <div className="glass-panel rounded-2xl p-6">
                 <div className="flex flex-col gap-5">
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1">
+                        <label className="mb-1 block text-sm font-semibold text-[#c4d5ce]">
                             Name
                         </label>
                         <input
@@ -47,11 +57,11 @@ export default function AddMonitor() {
                         value={form.name}
                         onChange={handleChange}
                         placeholder="API Name"
-                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                        className="field w-full rounded-lg px-3 py-2"
                         />
                     </div>    
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1">
+                        <label className="mb-1 block text-sm font-semibold text-[#c4d5ce]">
                             URL
                         </label>
                         <input
@@ -60,11 +70,11 @@ export default function AddMonitor() {
                         value={form.url}
                         onChange={handleChange}
                         placeholder="https://api.example.com"
-                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                        className="field w-full rounded-lg px-3 py-2"
                         />
                     </div>    
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1">
+                        <label className="mb-1 block text-sm font-semibold text-[#c4d5ce]">
                             Check Interval
                         </label>
                         <select
@@ -72,7 +82,7 @@ export default function AddMonitor() {
                         name="interval_seconds"
                         value={form.interval_seconds}
                         onChange={handleChange}
-                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                        className="field w-full rounded-lg px-3 py-2"
                         >
                         <option value={30}>Every 30 seconds</option>
                         <option value={60}>Every minute</option>
@@ -82,7 +92,7 @@ export default function AddMonitor() {
                     </div>  
 
                     {error && (
-                        <div data-testid="add-monitor-error" className="bg-red-900 border border-red-700 text-red-300 px-4 py-3 rounded-lg text-sm">
+                        <div data-testid="add-monitor-error" className="rounded-lg border border-red-400/35 bg-red-500/12 px-4 py-3 text-sm text-red-200">
                         {error}  
                         </div> 
                     )}
@@ -92,14 +102,14 @@ export default function AddMonitor() {
                         data-testid="add-monitor-submit"
                         onClick={handleSubmit}
                         disabled={loading}
-                        className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        className="btn-primary flex-1 rounded-lg px-4 py-2 font-bold transition-colors disabled:opacity-50">
                             {loading ? 'Creating...' : 'Create Monitor'}
                             
                         </button>
                         <button
                         data-testid="add-monitor-cancel"
                         onClick={() => navigate('/dashboard')}
-                        className="flex-1 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        className="btn-secondary flex-1 rounded-lg px-4 py-2 font-bold transition-colors">
                             Cancel
                         </button>
                     </div>

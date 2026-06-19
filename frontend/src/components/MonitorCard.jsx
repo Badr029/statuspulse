@@ -5,14 +5,14 @@ import StatusBadge from "./StatusBadge";
 export default function MonitorCard({ monitor, onToggle, onDelete}) {
 
     return(
-            <div data-testid="monitor-card" data-monitor-id={monitor.id} className="bg-gray-900 border border-gray-800 rounded-xl p-5 hover:border-gray-700 transition-colors">
+            <div data-testid="monitor-card" data-monitor-id={monitor.id} className="glass-card rounded-xl p-5 transition-colors">
 
 
                 {/* Header */}
                 <div className="flex items-start justify-between mb-3">
                     <div>
                         <h3 data-testid="monitor-card-name" className="font-semibold text-white">{monitor.name}</h3>
-                        <p data-testid="monitor-card-url" className="text-gray-400 text-sm mt-1 truncate max-w-xs">{monitor.url}</p>
+                        <p data-testid="monitor-card-url" className="muted mt-1 max-w-xs truncate text-sm">{monitor.url}</p>
                     </div>
                 <StatusBadge status={monitor.last_status || 'unknown'}
                 isActive={monitor.is_active}
@@ -20,7 +20,7 @@ export default function MonitorCard({ monitor, onToggle, onDelete}) {
                 </div>
 
                 {/* Stats */} 
-                <div className="flex gap-4 text-sm text-gray-400 mb-4">
+                <div className="muted mb-4 flex gap-4 text-sm">
                     <span data-testid="monitor-card-interval">Every {monitor.interval_seconds}s</span>
                     {monitor.is_active && <span data-testid="monitor-card-active">Active</span>}
                 </div>
@@ -29,17 +29,17 @@ export default function MonitorCard({ monitor, onToggle, onDelete}) {
                 <div className="flex gap-2">
                     <Link to={`/monitors/${monitor.id}`} 
                     data-testid="monitor-card-view"
-                    className="flex-1 text-center bg-gray-800 hover:bg-gray-700 text-white px-3 py-1.5 rounded-lg text-sm transition-colors">
+                    className="btn-secondary flex-1 rounded-lg px-3 py-1.5 text-center text-sm font-semibold transition-colors">
                     View Details
                     </Link>
                     <button onClick={() => onToggle(monitor.id)} 
                     data-testid="monitor-card-toggle"
-                    className="flex-1 bg-gray-800 hover:bg-gray-700 text-white px-3 py-1.5 rounded-lg text-sm transition-colors">
+                    className="btn-secondary flex-1 rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors">
                         {monitor.is_active ? 'Pause' : 'Resume'}
                     </button>
                     <button onClick={() => onDelete(monitor.id)} 
                     data-testid="monitor-card-delete"
-                    className="bg-red-900 hover:bg-red-800 text-red-300 px-3 py-1.5 rounded-lg text-sm transition-colors">
+                    className="btn-danger rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors">
                         Delete
                     </button>
                 </div>

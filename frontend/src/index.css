@@ -1,1 +1,144 @@
 @import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #071716;
+  color: #f7fbf8;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 82% 12%, rgba(60, 214, 142, 0.20), transparent 28rem),
+    radial-gradient(circle at 36% 58%, rgba(42, 157, 115, 0.12), transparent 30rem),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    #071716;
+  background-size: auto, auto, 76px 76px, 76px 76px, auto;
+}
+
+button,
+a,
+input,
+select {
+  font: inherit;
+}
+
+.app-shell {
+  min-height: 100vh;
+  color: #f7fbf8;
+}
+
+.app-container {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 56px;
+}
+
+.glass-panel {
+  background: linear-gradient(135deg, rgba(24, 47, 42, 0.82), rgba(10, 25, 23, 0.78));
+  border: 1px solid rgba(213, 236, 226, 0.24);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(18px);
+}
+
+.glass-card {
+  background: linear-gradient(150deg, rgba(19, 42, 38, 0.9), rgba(9, 23, 21, 0.78));
+  border: 1px solid rgba(213, 236, 226, 0.18);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
+}
+
+.glass-card:hover {
+  border-color: rgba(80, 232, 154, 0.52);
+}
+
+.page-title {
+  font-size: clamp(2.6rem, 7vw, 5.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #5ee7a1;
+  background: rgba(60, 214, 142, 0.12);
+  border: 1px solid rgba(94, 231, 161, 0.22);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #50e89a;
+  box-shadow: 0 0 18px rgba(80, 232, 154, 0.8);
+}
+
+.muted {
+  color: #a9bbb4;
+}
+
+.btn-primary {
+  background: #4ade93;
+  color: #06201a;
+  border: 1px solid rgba(218, 255, 232, 0.28);
+  box-shadow: 0 10px 28px rgba(74, 222, 147, 0.22);
+}
+
+.btn-primary:hover {
+  background: #5ef0a5;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.045);
+  color: #f7fbf8;
+  border: 1px solid rgba(213, 236, 226, 0.38);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(94, 231, 161, 0.55);
+}
+
+.btn-danger {
+  background: rgba(127, 29, 29, 0.58);
+  color: #fecaca;
+  border: 1px solid rgba(248, 113, 113, 0.34);
+}
+
+.btn-danger:hover {
+  background: rgba(153, 27, 27, 0.72);
+}
+
+.field {
+  background: rgba(5, 18, 16, 0.72);
+  border: 1px solid rgba(213, 236, 226, 0.20);
+  color: #f7fbf8;
+}
+
+.field::placeholder {
+  color: #688077;
+}
+
+.field:focus {
+  outline: none;
+  border-color: #50e89a;
+  box-shadow: 0 0 0 3px rgba(80, 232, 154, 0.14);
+}
