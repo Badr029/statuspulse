@@ -62,7 +62,7 @@ jobs:
           NODE_ENV: test
           SENDGRID_API_KEY: ""
           ALERT_FROM_EMAIL: ""
-          ALERT_TO_EMAIL: ""
+          ALERT_TO_EMAIL: ${{ secrets.JWT_SECRET }}
 
 #JOB 2: Docker Build Checkout
 
