@@ -42,6 +42,8 @@ services:
       SENDGRID_API_KEY: ${SENDGRID_API_KEY}
       ALERT_FROM_EMAIL: ${ALERT_FROM_EMAIL}
       ALERT_TO_EMAIL: ${ALERT_TO_EMAIL}
+      JWT_SECRET: ${JWT_SECRET}
+      
       
     ports:
       - "3000:3000"

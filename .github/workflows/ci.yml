@@ -50,7 +50,8 @@ jobs:
 
       - name: Apply database migrations
         run: |
-          PGPASSWORD=testpassword psql -h localhost -p 5433 -U statuspulse -d statuspulse_test_db -f db/migrations/001_initial_schema.sql
+          psql -h localhost -p 5433 -U statuspulse -d statuspulse_test_db -f db/migrations/001_initial_schema.sql
+          psql -h localhost -p 5433 -U statuspulse -d statuspulse_test_db -f db/migrations/002_seed_data.sql
         env:
           PGPASSWORD: testpassword
 
@@ -136,6 +137,7 @@ jobs:
           SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }}
           ALERT_FROM_EMAIL=${{ secrets.ALERT_FROM_EMAIL }}
           ALERT_TO_EMAIL=${{ secrets.ALERT_TO_EMAIL }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
           EOF
 
       - name: Start full stack with Docker Compose

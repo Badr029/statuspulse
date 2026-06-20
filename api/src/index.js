@@ -8,6 +8,7 @@ const helmet = require('helmet');
 const healthRouter = require('./routes/health');        
 const monitorRouter = require('./routes/monitors'); 
 const errorHandler = require('./middleware/errorHandler'); 
+const authRouter = require('./routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,7 +24,9 @@ app.use(express.json());
 //routes
 
 app.use('/health', healthRouter);
+app.use('/auth', authRouter);
 app.use('/monitors', monitorRouter); 
+
 
 //404 error handler
 
