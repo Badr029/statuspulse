@@ -281,8 +281,8 @@ Pausing a noisy or misconfigured monitor via `PATCH /monitors/:id/toggle` is a d
 | 3 | Done | Background worker (node-cron, prober, alerting) |
 | 4 | Done | React frontend (dashboard, charts, add monitor form) |
 | 6 | Done | Testing - Jest (unit/integration) + Java Selenium (E2E, Page Object Model) |
+| 7 | Done | CI/CD - GitHub Actions (lint -> test -> build) |
 | 5 | In progress | User authentication (JWT, per-user monitors) |
-| 7 | Planned | CI/CD - GitHub Actions (lint -> test -> build) |
 
 ---
 
