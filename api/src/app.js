@@ -5,13 +5,11 @@ const cors = require('cors');
 const morgan = require('morgan'); 
 const helmet = require('helmet'); 
 
-const healthRouter = require('./routes/health');        
-const monitorRouter = require('./routes/monitors'); 
+const routes = require('./routes');
 const errorHandler = require('./middleware/errorHandler'); 
-const authRouter = require('./routes/auth');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+
 
 
 // Middleware
@@ -23,9 +21,7 @@ app.use(express.json());
 
 //routes
 
-app.use('/health', healthRouter);
-app.use('/auth', authRouter);
-app.use('/monitors', monitorRouter); 
+app.use(routes);
 
 
 //404 error handler
@@ -37,11 +33,8 @@ app.use((req, res) => {
 //Global error handler
 app.use(errorHandler);
 
-//Start the server
-if(require.main === module){
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
-}
+
+
+
 
 module.exports = app;

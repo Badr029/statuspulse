@@ -86,7 +86,7 @@ if (!apikey || !fromEmail || !toEmail) {
     }
     
     catch (err) {
-        console.error('[email] error sending email alert', error.message);
+        console.error('[email] error sending email alert', err.message);
         if (err.message){
             console.error('[email] SendGrid error details', error.response.body);
         }  

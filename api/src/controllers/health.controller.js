@@ -1,9 +1,5 @@
-const express = require('express'); //get the express module
-const pool = require('../db/conPool'); //get the connection pool
-
-const router = express.Router(); 
-
-router.get('/', async (req, res, next) => {
+const pool = require('../config/db');
+async function health(req, res, next) {
 
     try {
         await pool.query('SELECT 1');
@@ -17,6 +13,6 @@ router.get('/', async (req, res, next) => {
         next(err);
     }
 
-});
+}
 
-module.exports = router;
+module.exports = {health,};

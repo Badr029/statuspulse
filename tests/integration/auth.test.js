@@ -1,6 +1,6 @@
 const request = require('supertest');
-const app = require('../../api/src/index');
-const pool = require('../../api/src/db/conPool');
+const app = require('../../api/src/app');
+const pool = require('../../api/src/config/db');
 const jwt = require('jsonwebtoken');
 
 describe('/authentication API', () => {
@@ -93,7 +93,7 @@ describe('/authentication API', () => {
             password: 'Password1!',
         });
         expect(response.status).toBe(409);
-        expect(response.body.error).toContain('already exists');
+        expect(response.body.error.message).toContain('already exists');
     });
 
     it('returns a valid JWT token that can be decoded', async () => {

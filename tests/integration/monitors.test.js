@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../../api/src/index');
+const app = require('../../api/src/app');
 const pool = require('../../api/src/db/conPool');
 
 describe('Monitor API', () => {
