@@ -20,8 +20,13 @@ The project was built to showcase a complete engineering workflow — from a str
 
 **Live demo screenshot:**
 
-> _Add a screenshot of your running dashboard here_
-> `![Dashboard screenshot](docs/screenshot.png)`
+![Dashboard](docs/screenshots/01-dashboard.png)
+
+![Add Monitor](docs/screenshots/03-add-monitor-filled.png)
+
+![Monitor Detail](docs/screenshots/05-monitor-detail.png)
+
+![Edit Monitor](docs/screenshots/06-monitor-edit.png)
 
 ---
 
@@ -49,10 +54,10 @@ The project was built to showcase a complete engineering workflow — from a str
 | Frontend | React 18, Vite, Tailwind CSS, Recharts, React Router |
 | Database | PostgreSQL 15 |
 | Email alerts | SendGrid (`@sendgrid/mail`) |
-| Unit & integration tests | Jest, Supertest *(planned)* |
-| E2E tests | Java 17, Selenium WebDriver 4, JUnit 5, Maven *(planned)* |
+| Unit & integration tests | Jest, Supertest  |
+| E2E tests | Java 17, Selenium WebDriver 4, JUnit 5, Maven |
 | Containerisation | Docker, Docker Compose (WSL2 on Windows) |
-| CI/CD | GitHub Actions *(planned)* |
+| CI/CD | GitHub Actions |
 
 ---
 
@@ -91,49 +96,98 @@ All services run in Docker containers on a shared network and communicate by ser
 
 ```
 statuspulse/
-├── api/                         # Express REST API
+├── api/                                      # Express REST API
 │   ├── src/
-│   │   ├── routes/
-│   │   │   ├── monitors.js      # Full CRUD + controls (toggle, history)
-│   │   │   └── health.js        # GET /health
-│   │   ├── db/
-│   │   │   └── conPool.js       # PostgreSQL connection pool
+│   │   ├── app.js                            # Express app setup, middleware, routes, error handler
+│   │   ├── config/
+│   │   │   └── db.js                         # PostgreSQL connection pool
+│   │   ├── controllers/                      # Handles req/res
+│   │   │   ├── auth.controller.js
+│   │   │   ├── health.controller.js
+│   │   │   └── monitor.controller.js
+│   │   ├── integrations/                     # External service clients
+│   │   │   └── sendgrid.client.js
 │   │   ├── middleware/
-│   │   │   └── errorHandler.js  # Global error handler
-│   │   ├── services/
-│   │   │   └── email.js         # SendGrid alert service
-│   │   └── index.js              # App entry point
-│   └── Dockerfile
-├── worker/                      # Background ping scheduler
+│   │   │   ├── errorHandler.js               # Global error handler
+│   │   │   └── loadMonitorById.js            # Fetch monitor by :id and attach to req
+│   │   ├── repositories/                     # Database query layer
+│   │   │   ├── auth.repository.js
+│   │   │   └── monitor.repository.js
+│   │   ├── routes/                           # Express routes
+│   │   │   ├── index.js                      # Central route registration
+│   │   │   ├── auth.routes.js
+│   │   │   ├── health.routes.js
+│   │   │   └── monitors.routes.js
+│   │   ├── services/                         # Business logic layer
+│   │   │   ├── auth.service.js
+│   │   │   └── monitor.service.js
+│   │   └── validators/
+│   │       ├── auth.validator.js
+│   │       └── monitorUrl.validator.js
+│   ├── server.js                             # Starts the API server
+│   ├── Dockerfile
+│   ├── package.json
+│   └── package-lock.json
+├── worker/                                   # Background ping scheduler
 │   ├── src/
+│   │   ├── __mocks__/
+│   │   │   └── prober.js
 │   │   ├── db/
-│   │   │   └── conPool.js
+│   │   │   ├── __mocks__/
+│   │   │   │   └── conPool.js
+│   │   │   └── conPool.js                    # Worker PostgreSQL pool
 │   │   ├── services/
-│   │   │   └── email.js         # Copied from api
-│   │   ├── prober.js            # HTTP probe + latency measurement
-│   │   ├── scheduler.js         # node-cron job + alert logic
-│   │   └── index.js
-│   └── Dockerfile
-├── frontend/                    # React dashboard (Vite + Tailwind)
-│   └── src/
-│       ├── api/
-│       │   └── monitors.js      # Axios API client
-│       ├── components/
-│       │   ├── Navbar.jsx
-│       │   ├── StatusBadge.jsx
-│       │   └── MonitorCard.jsx
-│       ├── pages/
-│       │   ├── Dashboard.jsx
-│       │   ├── AddMonitor.jsx
-│       │   └── MonitorDetail.jsx
-│       ├── App.jsx
-│       └── main.jsx
+│   │   │   ├── __mocks__/
+│   │   │   │   └── email.js
+│   │   │   └── email.js                      # SendGrid email alert service
+│   │   ├── index.js                          # Worker entry point
+│   │   ├── prober.js                         # HTTP probe + latency measurement
+│   │   └── scheduler.js                      # node-cron checks + alert logic
+│   ├── Dockerfile
+│   ├── package.json
+│   └── package-lock.json
+├── frontend/                                 # React dashboard, Vite + Tailwind
+│   ├── public/
+│   │   ├── favicon.svg
+│   │   └── icons.svg
+│   ├── src/
+│   │   ├── api/
+│   │   │   └── monitors.js                   # Axios API client
+│   │   ├── assets/
+│   │   │   ├── hero.png
+│   │   │   ├── react.svg
+│   │   │   └── vite.svg
+│   │   ├── components/
+│   │   │   ├── MonitorCard.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   └── StatusBadge.jsx
+│   │   ├── pages/
+│   │   │   ├── AddMonitor.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   └── MonitorDetail.jsx
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   └── main.jsx
+│   ├── Dockerfile
+│   ├── index.html
+│   ├── vite.config.js
+│   ├── eslint.config.js
+│   ├── package.json
+│   └── package-lock.json
+├── tests/
+│ 
 ├── db/
 │   └── migrations/
-│       └── 001_initial_schema.sql
-├── docs/
-│   └── postman_collection.json  # Organised Postman collection
+│       ├── 001_initial_schema.sql            # Monitors + ping logs schema
+│       └── 002_add_users.sql                 # Users/auth schema
+├── .github/
+│   └── workflows/
+│       └── ci.yml                            # GitHub Actions CI
 ├── docker-compose.yml
+├── jest.config.js
+├── package.json
+├── package-lock.json
 ├── .env.example
 └── README.md
 ```
