@@ -50,10 +50,25 @@ async function checkMonitors(monitor) {
 async function runChecks() {
     console.log('[scheduler] Starting monitor checks...');
     try {
-        const { rows: monitors } = await pool.query('SELECT * FROM monitors WHERE is_active = true');
+        const { rows: monitors } = await pool.query(`
+            SELECT m.*
+            FROM monitors m
+            LEFT JOIN LATERAL (
+                SELECT checked_at
+                FROM ping_logs
+                WHERE monitor_id = m.id
+                ORDER BY checked_at DESC
+                LIMIT 1
+            ) latest ON true
+            WHERE m.is_active = true
+            AND (
+                latest.checked_at IS NULL
+                OR latest.checked_at <= NOW() - (m.interval_seconds * INTERVAL '1 second')
+            )
+        `);
 
     if (monitors.length === 0) {
-        console.log('[scheduler] No active monitors found.');
+        console.log('[scheduler] No monitors are due for checking.');
         return;
     }
 
@@ -68,8 +83,8 @@ async function runChecks() {
 }
 
 function startScheduler() {
-    console.log('[scheduler] Scheduler started, running checks every minute');
-    cron.schedule('* * * * *', runChecks);
+    console.log('[scheduler] Scheduler started, checking for due monitors every 30 seconds');
+    cron.schedule('*/30 * * * * *', runChecks);
     runChecks();
 }
 
